@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>جعبه‌ابزار الکترونیک | Electronics Toolkit</title>
+<meta name="description" content="ماشین‌حساب‌های الکترونیک، شبیه‌ساز مدار، دستیار هوش مصنوعی و لینک ابزارهای بیرونی">
+<meta name="theme-color" content="#0A0A0F">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;800&family=Inter:wght@400;600&family=JetBrains+Mono&display=swap" rel="stylesheet">
+<style>
+/* ---------- Design tokens ---------- */
+:root{--bg:#0A0A0F;--bg2:#12121A;--card:rgba(26,26,46,.72);--blue:#4A6CF7;--vio:#8B5CF6;--lp:#A78BFA;--gold:#FFD700;--gg:linear-gradient(135deg,#FFD700,#FFA500);--tx:#fff;--tx2:#B8B8D0;--ok:#10B981;--warn:#F59E0B;--err:#EF4444;--bd:rgba(139,92,246,.2);--gl:rgba(74,108,247,.4)}
+[data-theme=light]{--bg:#f2f3fb;--bg2:#fff;--card:rgba(255,255,255,.88);--tx:#14142b;--tx2:#55557a}
+*{box-sizing:border-box}
+body{margin:0;font-family:Vazirmatn,Inter,system-ui,sans-serif;color:var(--tx);min-height:100vh;padding-bottom:76px;
+background:radial-gradient(900px 500px at 90% -10%,rgba(139,92,246,.22),transparent),radial-gradient(700px 400px at -10% 10%,rgba(74,108,247,.2),transparent),var(--bg)}
+header{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;padding:12px 16px;background:var(--bg2);border-bottom:1px solid var(--bd);position:sticky;top:0;z-index:5}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:1.1rem}
+.logo b{background:var(--gg);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hr{display:flex;gap:8px;align-items:center;flex:1;justify-content:flex-end}
+input,select,textarea,button{font:inherit;color:var(--tx);background:var(--bg2);border:1px solid var(--bd);border-radius:12px;padding:9px 12px;transition:.3s ease}
+input:focus,select:focus,textarea:focus,button:focus-visible{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px var(--gl)}
+button{cursor:pointer}
+button.pri{background:var(--gg);color:#1a1200;border:0;font-weight:800}
+button:hover{border-color:var(--lp)}
+#q{max-width:210px;flex:1}
+main{max-width:1100px;margin:auto;padding:16px}
+section.tab{display:none}section.tab.on{display:block}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:14px}
+.card{background:var(--card);backdrop-filter:blur(12px);border:1px solid var(--bd);border-radius:16px;padding:16px;box-shadow:0 8px 28px rgba(74,108,247,.12)}
+.card h3{margin:0 0 10px;font-size:1rem;color:var(--gold)}
+label{display:block;font-size:.8rem;color:var(--tx2);margin:8px 0 3px}
+.card input,.card select,.card textarea{width:100%}
+textarea{font-family:'JetBrains Mono',monospace;direction:ltr;text-align:left;min-height:130px}
+.out{margin-top:10px;font-size:.92rem}
+.out table{width:100%;border-collapse:collapse}
+.out td{padding:5px 4px;border-bottom:1px solid var(--bd)}
+.out td:last-child{font-family:'JetBrains Mono',monospace;text-align:left;color:var(--lp)}
+.err{color:var(--err)}.note{color:var(--tx2);font-size:.78rem;margin-top:8px}
+nav{position:fixed;bottom:0;inset-inline:0;display:flex;background:var(--bg2);border-top:1px solid var(--bd);z-index:6}
+nav button{flex:1;border:0;border-radius:0;background:none;padding:14px 4px;color:var(--tx2);font-size:.85rem}
+nav button.on{color:var(--gold);box-shadow:inset 0 3px 0 var(--vio)}
+canvas{width:100%;height:auto;background:var(--bg2);border-radius:12px;border:1px solid var(--bd)}
+a.lk{display:block;text-decoration:none;color:var(--tx)}
+a.lk small{color:var(--tx2)}
+a.lk:hover .card{border-color:var(--gold)}
+#chat{white-space:pre-wrap;max-height:360px;overflow:auto;font-size:.92rem}
+#chat p{margin:6px 0;padding:8px 10px;border-radius:12px;background:var(--bg2)}
+#chat p.u{background:rgba(74,108,247,.25)}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<header>
+ <div class="logo"><svg width="34" height="34" viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFD700"/><stop offset="1" stop-color="#FFA500"/></linearGradient></defs><rect width="64" height="64" rx="14" fill="#1A1A2E"/><path d="M6 32h12l5-14 8 28 6-20 4 6h17" fill="none" stroke="url(#g)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg><b id="ttl"></b></div>
+ <div class="hr">
+  <input id="q" type="search" placeholder="جستجو… (Ctrl+K)" aria-label="جستجو">
+  <button id="th" aria-label="تم">◐</button><button id="lg" aria-label="زبان">EN</button>
+ </div>
+</header>
+<main>
+ <section class="tab on" id="calc"><div class="grid" id="calcs"></div></section>
+ <section class="tab" id="sim"><div class="grid">
+  <div class="card"><h3>حل‌کننده DC (Netlist) · DC Solver</h3>
+   <textarea id="net" spellcheck="false">* Voltage divider
+V1 1 0 10
+R1 1 2 1k
+R2 2 0 2k</textarea>
+   <button class="pri" id="run" style="margin-top:8px">اجرای شبیه‌سازی</button>
+   <div class="out" id="simout"></div>
+   <div class="note">فرمت: R/V/I نام گره۱ گره۲ مقدار — گره زمین «0». پسوندها: p n u m k meg g. جهت منبع جریان: از گره۱ به گره۲ درون منبع. روش: تحلیل گره اصلاح‌شده (MNA).</div></div>
+  <div class="card"><h3>پاسخ پله RC · RC Transient</h3>
+   <div class="grid" style="grid-template-columns:repeat(3,1fr);gap:8px"><div><label>R</label><input id="tr" value="10k"></div><div><label>C</label><input id="tc" value="100u"></div><div><label>Vs</label><input id="tv" value="5"></div></div>
+   <label>حالت</label><select id="tm"><option value="c">شارژ</option><option value="d">دشارژ</option></select>
+   <canvas id="cv" width="600" height="300" style="margin-top:10px"></canvas><div class="out" id="trout"></div></div>
+ </div></section>
+ <section class="tab" id="ai"><div class="card"><h3>دستیار هوشمند · Gemini</h3>
+  <div class="grid" style="grid-template-columns:2fr 1fr;gap:8px"><div><label>کلید API (Google AI Studio)</label><input id="key" type="password" autocomplete="off"></div><div><label>مدل</label><input id="mdl" value="gemini-2.0-flash" dir="ltr"></div></div>
+  <div class="note">کلید فقط در مرورگر خودتان (localStorage) ذخیره می‌شود؛ روی سایت عمومی از کلید محدودشده (HTTP referrer) استفاده کنید.</div>
+  <div id="chat" class="out"></div>
+  <label><input type="checkbox" id="att" style="width:auto"> پیوست کردن نت‌لیست و نتیجه شبیه‌سازی</label>
+  <textarea id="msg" style="direction:rtl;text-align:right;min-height:80px" placeholder="سؤال یا مشکل مدارتان را بنویسید"></textarea>
+  <button class="pri" id="send" style="margin-top:8px">ارسال</button></div></section>
+ <section class="tab" id="links"><div class="card" style="margin-bottom:14px"><h3>جستجوی قطعه · Part Search</h3>
+  <input id="ps" placeholder="مثلاً LM358 یا IRF540" dir="ltr">
+  <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px"><button data-s="https://octopart.com/search?q=">Octopart</button><button data-s="https://www.alldatasheet.com/view.jsp?Searchword=">AllDatasheet</button><button data-s="https://www.digikey.com/en/products/result?keywords=">Digi-Key</button><button data-s="https://www.mouser.com/c/?q=">Mouser</button></div></div>
+  <div class="grid" id="lk"></div></section>
+</main>
+<nav id="nav" aria-label="بخش‌ها"></nav>
+<script>
+"use strict";
+/* ================= Helpers ================= */
+const $=id=>document.getElementById(id);
+const ls=k=>{try{return localStorage.getItem(k)}catch(e){return null}};
+const lset=(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}};
+const esc=s=>String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+/* Parse "4.7k", "100n", "1meg" -> number (NaN if empty/invalid) */
+function sv(s){const m=String(s).trim().toLowerCase().match(/^([-+]?(?:\d+\.?\d*|\.\d+)(?:e[-+]?\d+)?)\s*(meg|g|k|m|u|µ|n|p)?/);
+ if(!m)return NaN;const M={meg:1e6,g:1e9,k:1e3,m:1e-3,u:1e-6,'µ':1e-6,n:1e-9,p:1e-12};return parseFloat(m[1])*(M[m[2]]||1)}
+/* Engineering-notation formatter */
+function fmt(x,u){if(!isFinite(x))return '—';if(x===0)return '0 '+u;const a=Math.abs(x),P=[[1e9,'G'],[1e6,'M'],[1e3,'k'],[1,''],[1e-3,'m'],[1e-6,'µ'],[1e-9,'n'],[1e-12,'p']];
+ let p=P[P.length-1];for(const q of P)if(a>=q[0]*0.9999999){p=q;break}return +(x/p[0]).toPrecision(4)+' '+p[1]+u}
+const table=r=>'<table>'+r.map(x=>'<tr><td>'+x[0]+'</td><td dir="ltr">'+x[1]+'</td></tr>').join('')+'</table>';
+const E24=[1,1.1,1.2,1.3,1.5,1.6,1.8,2,2.2,2.4,2.7,3,3.3,3.6,3.9,4.3,4.7,5.1,5.6,6.2,6.8,7.5,8.2,9.1];
+function e24up(r){const d=Math.pow(10,Math.floor(Math.log10(r))),m=r/d;for(const x of E24)if(x>=m-1e-9)return x*d;return 10*d}
+
+/* ================= Calculators ================= */
+const CALCS=[
+{t:'قانون اهم · Ohm\'s Law',f:[['V ولتاژ (V)',''],['I جریان (A)',''],['R مقاومت (Ω)',''],['P توان (W)','']],
+ run:([V,I,R,P])=>{const k=[V,I,R,P].map(x=>!isNaN(x));let v=V,i=I,r=R,p=P;
+  if(k[0]&&k[1]){r=v/i;p=v*i}else if(k[0]&&k[2]){i=v/r;p=v*v/r}else if(k[1]&&k[2]){v=i*r;p=i*i*r}
+  else if(k[0]&&k[3]){i=p/v;r=v*v/p}else if(k[1]&&k[3]){v=p/i;r=p/(i*i)}else if(k[2]&&k[3]){v=Math.sqrt(p*r);i=Math.sqrt(p/r)}
+  else return 'دو مقدار را وارد کنید (مثال: 12 و 2.2k)';
+  return table([['V',fmt(v,'V')],['I',fmt(i,'A')],['R',fmt(r,'Ω')],['P',fmt(p,'W')]])}},
+{t:'تقسیم ولتاژ · Voltage Divider',f:[['Vin (V)','12'],['R1 (Ω)','10k'],['R2 (Ω)','4.7k'],['بار RL (اختیاری)','']],
+ run:([Vi,R1,R2,RL])=>{const r2=isNaN(RL)?R2:R2*RL/(R2+RL),vo=Vi*r2/(R1+r2),i=Vi/(R1+r2);
+  return table([['Vout (با بار)',fmt(vo,'V')],['Vout (بی‌بار)',fmt(Vi*R2/(R1+R2),'V')],['جریان کل',fmt(i,'A')],['توان R1',fmt(i*i*R1,'W')]])}},
+{t:'مقاومت LED · LED Resistor',f:[['Vs منبع (V)','5'],['Vf ولتاژ LED (V)','2'],['I جریان (A)','20m'],['تعداد LED سری','1']],
+ run:([Vs,Vf,I,n])=>{n=n||1;const r=(Vs-n*Vf)/I;if(!(r>0))return '<span class="err">ولتاژ منبع باید بیشتر از مجموع ولتاژ LEDها باشد</span>';
+  const s=e24up(r),ia=(Vs-n*Vf)/s,p=ia*ia*s;
+  return table([['R محاسبه‌شده',fmt(r,'Ω')],['استاندارد E24',fmt(s,'Ω')],['جریان واقعی',fmt(ia,'A')],['توان مقاومت',fmt(p,'W')],['توان پیشنهادی',p>0.125?'≥ '+(p>0.25?(p>0.5?'1W':'1/2W'):'1/4W'):'1/8W']])}},
+{t:'فیلتر RC · RC Filter',f:[['R (Ω)','1k'],['C (F)','100n'],['فرکانس تست f (Hz)','']],
+ run:([R,C,f])=>{const fc=1/(2*Math.PI*R*C),rows=[['فرکانس قطع fc',fmt(fc,'Hz')],['ثابت زمانی τ',fmt(R*C,'s')]];
+  if(!isNaN(f)){const x=f/fc,m=1/Math.sqrt(1+x*x),h=x*m;rows.push(['پایین‌گذر |H|',(20*Math.log10(m)).toFixed(2)+' dB'],['فاز LP',(-Math.atan(x)*180/Math.PI).toFixed(1)+'°'],['بالاگذر |H|',(20*Math.log10(h)).toFixed(2)+' dB'],['فاز HP',(90-Math.atan(x)*180/Math.PI).toFixed(1)+'°'])}
+  return table(rows)}},
+{t:'تایمر ۵۵۵ · 555 Timer',f:[['R1 (Ω)','1k'],['R2 (Ω)','10k'],['C (F)','10u']],
+ run:([R1,R2,C])=>{const T=0.693*(R1+2*R2)*C;return table([['فرکانس آستابل',fmt(1/T,'Hz')],['زمان High',fmt(0.693*(R1+R2)*C,'s')],['زمان Low',fmt(0.693*R2*C,'s')],['Duty',(100*(R1+R2)/(R1+2*R2)).toFixed(1)+' %'],['مونوستابل T=1.1·R1·C',fmt(1.1*R1*C,'s')]])}},
+{t:'دسیبل · Decibel',f:[['نسبت (ضریب)','10'],['dB',''],['dBm','']],
+ run:([r,db,dm])=>{const o=[];if(!isNaN(r)){o.push(['نسبت توان → dB',(10*Math.log10(r)).toFixed(3)],['نسبت ولتاژ → dB',(20*Math.log10(r)).toFixed(3)])}
+  if(!isNaN(db))o.push(['dB → نسبت توان',+Math.pow(10,db/10).toPrecision(5)],['dB → نسبت ولتاژ',+Math.pow(10,db/20).toPrecision(5)]);
+  if(!isNaN(dm))o.push(['dBm → توان',fmt(Math.pow(10,dm/10)/1000,'W')]);return o.length?table(o):'یک مقدار وارد کنید'}},
+{t:'سیستم اعداد · Number Systems',f:[['عدد','255'],['مبنای ورودی (2/8/10/16)','10']],
+ run:(n,raw)=>{const b=parseInt(raw[1])||10;if(![2,8,10,16].includes(b))throw new Error('مبنا باید 2، 8، 10 یا 16 باشد');const v=parseInt(raw[0].trim(),b);
+  if(isNaN(v))throw new Error('عدد در این مبنا معتبر نیست');
+  const tc=(w)=>(v>=-(2**(w-1))&&v<2**w)?(v&(w==8?255:65535)).toString(2).padStart(w,'0'):'—';
+  return table([['Binary',v.toString(2)],['Octal',v.toString(8)],['Decimal',v.toString(10)],['Hex',v.toString(16).toUpperCase()],['مکمل ۲ (8 بیت)',tc(8)],['مکمل ۲ (16 بیت)',tc(16)]])}}
+];
+function buildCalcs(){const box=$('calcs');
+ CALCS.forEach(c=>{const el=document.createElement('div');el.className='card';el.dataset.k=c.t.toLowerCase();
+  el.innerHTML='<h3>'+c.t+'</h3>'+c.f.map((f,i)=>'<label>'+f[0]+'</label><input dir="ltr" inputmode="text" value="'+f[1]+'" data-i="'+i+'">').join('')+'<div class="out"></div><div class="note">پسوندها: p n u m k meg g</div>';
+  const out=el.querySelector('.out'),ins=[...el.querySelectorAll('input')];
+  const go=()=>{try{out.innerHTML=c.run(ins.map(x=>sv(x.value)),ins.map(x=>x.value))}catch(e){out.innerHTML='<span class="err">'+esc(e.message)+'</span>'}};
+  ins.forEach(x=>x.addEventListener('input',go));go();box.appendChild(el)});
+ buildColor()}
+
+/* ----- Resistor colour code ----- */
+const CL=[['مشکی','#111',0,1,null],['قهوه‌ای','#8B4513',1,10,1],['قرمز','#e02020',2,100,2],['نارنجی','#ff8c00',3,1e3,null],['زرد','#ffe000',4,1e4,null],['سبز','#1fa000',5,1e5,.5],['آبی','#2050ff',6,1e6,.25],['بنفش','#8a2be2',7,1e7,.1],['خاکستری','#888',8,1e8,.05],['سفید','#fff',9,1e9,null],['طلایی','#d4af37',null,.1,5],['نقره‌ای','#c0c0c0',null,.01,10]];
+function colorSel(id,test,def){return '<select id="'+id+'">'+CL.map((c,i)=>test(c)?'<option value="'+i+'"'+(i==def?' selected':'')+'>'+c[0]+'</option>':'').join('')+'</select>'}
+function buildColor(){const el=document.createElement('div');el.className='card';el.dataset.k='resistor color code کد رنگی مقاومت';
+ el.innerHTML='<h3>کد رنگی مقاومت · Resistor Colour Code</h3><label>تعداد باند</label><select id="rm"><option>4</option><option>5</option></select>'+
+ '<label>باند ۱</label>'+colorSel('rd1',c=>c[2]!==null,1)+'<label>باند ۲</label>'+colorSel('rd2',c=>c[2]!==null,0)+
+ '<div id="rd3w"><label>باند ۳</label>'+colorSel('rd3',c=>c[2]!==null,0)+'</div><label>ضریب</label>'+colorSel('rmu',c=>c[3]!==null,2)+'<label>تلرانس</label>'+colorSel('rtl',c=>c[4]!==null,10)+'<div class="out" id="rout"></div>';
+ $('calcs').appendChild(el);el.querySelectorAll('select').forEach(s=>s.addEventListener('change',rcc));rcc()}
+function rcc(){const m=+$('rm').value;$('rd3w').style.display=m==5?'':'none';const g=id=>CL[+$(id).value];
+ const d=[g('rd1'),g('rd2')];if(m==5)d.push(g('rd3'));const n=d.reduce((a,c)=>a*10+c[2],0),val=n*g('rmu')[3];
+ const cols=d.map(c=>c[1]).concat([g('rmu')[1],g('rtl')[1]]);
+ let s='<svg viewBox="0 0 300 80" width="100%" role="img" aria-label="مقاومت"><line x1="5" y1="40" x2="295" y2="40" stroke="#999" stroke-width="4"/><rect x="50" y="12" width="200" height="56" rx="20" fill="#d9b98a"/>';
+ cols.forEach((c,i)=>{const x=i==cols.length-1?218:68+i*30;s+='<rect x="'+x+'" y="12" width="12" height="56" fill="'+c+'" stroke="#0004"/>'});
+ $('rout').innerHTML=s+'</svg>'+table([['مقدار',fmt(val,'Ω')],['تلرانس','± '+g('rtl')[4]+' %'],['محدوده',fmt(val*(1-g('rtl')[4]/100),'Ω')+' … '+fmt(val*(1+g('rtl')[4]/100),'Ω')]])}
+$('rm')&&0;
+
+/* ================= Simulator: MNA DC solver ================= */
+function solve(text){
+ const els=[],nodes=new Map([['0',0]]);
+ const nid=n=>{n=n.toLowerCase()==='gnd'?'0':n;if(!nodes.has(n))nodes.set(n,nodes.size);return nodes.get(n)};
+ text.split('\n').forEach((ln,li)=>{ln=ln.trim();if(!ln||ln[0]=='*'||ln[0]==';')return;const t=ln.split(/\s+/);
+  if(t.length<4)throw new Error('خط '+(li+1)+': چهار فیلد لازم است');const ty=t[0][0].toUpperCase();
+  if(!'RVI'.includes(ty))throw new Error('خط '+(li+1)+': فقط R، V و I پشتیبانی می‌شود');
+  const v=sv(t[3]);if(isNaN(v))throw new Error('خط '+(li+1)+': مقدار نامعتبر');if(ty=='R'&&v<=0)throw new Error('خط '+(li+1)+': R باید مثبت باشد');
+  els.push({n:t[0],ty,a:nid(t[1]),b:nid(t[2]),v})});
+ if(!els.length)throw new Error('نت‌لیست خالی است');
+ const N=nodes.size-1,vs=els.filter(e=>e.ty=='V'),S=N+vs.length,A=Array.from({length:S},()=>new Array(S).fill(0)),B=new Array(S).fill(0);
+ const add=(r,c,x)=>{if(r>=0&&c>=0)A[r][c]+=x};let vi=0;
+ els.forEach(e=>{const a=e.a-1,b=e.b-1;
+  if(e.ty=='R'){const g=1/e.v;add(a,a,g);add(b,b,g);add(a,b,-g);add(b,a,-g)}
+  else if(e.ty=='I'){if(a>=0)B[a]-=e.v;if(b>=0)B[b]+=e.v}
+  else{const j=N+vi++;e.j=j;add(a,j,1);add(b,j,-1);add(j,a,1);add(j,b,-1);B[j]=e.v}});
+ /* Gaussian elimination with partial pivoting */
+ for(let c=0;c<S;c++){let p=c;for(let r=c+1;r<S;r++)if(Math.abs(A[r][c])>Math.abs(A[p][c]))p=r;
+  if(Math.abs(A[p][c])<1e-18)throw new Error('مدار قابل حل نیست (گره شناور یا حلقه منبع ولتاژ)');
+  [A[c],A[p]]=[A[p],A[c]];[B[c],B[p]]=[B[p],B[c]];
+  for(let r=c+1;r<S;r++){const f=A[r][c]/A[c][c];if(f){for(let k=c;k<S;k++)A[r][k]-=f*A[c][k];B[r]-=f*B[c]}}}
+ const x=new Array(S).fill(0);for(let r=S-1;r>=0;r--){let s=B[r];for(let k=r+1;k<S;k++)s-=A[r][k]*x[k];x[r]=s/A[r][r]}
+ const V=i=>i==0?0:x[i-1];return{nodes,els,V,x}}
+function runSim(){const o=$('simout');try{const r=solve($('net').value);let rows=[];
+  r.nodes.forEach((i,n)=>rows.push(['V('+esc(n)+')',fmt(r.V(i),'V')]));
+  r.els.forEach(e=>{if(e.ty=='R'){const i=(r.V(e.a)-r.V(e.b))/e.v;rows.push(['I('+esc(e.n)+') / P',fmt(i,'A')+' / '+fmt(i*i*e.v,'W')])}
+   else if(e.ty=='V'){const i=-r.x[e.j];rows.push(['I('+esc(e.n)+') تحویلی',fmt(i,'A')+' / '+fmt(i*e.v,'W')])}});
+  o.innerHTML=table(rows);window.lastSim=rows.map(x=>x[0]+' = '+x[1]).join('\n')}catch(e){o.innerHTML='<span class="err">'+esc(e.message)+'</span>';window.lastSim=''}}
+function drawRC(){const R=sv($('tr').value),C=sv($('tc').value),Vs=sv($('tv').value),ch=$('tm').value=='c',c=$('cv'),g=c.getContext('2d');
+ g.clearRect(0,0,600,300);if(!(R>0&&C>0&&isFinite(Vs))){$('trout').innerHTML='<span class="err">مقادیر معتبر وارد کنید</span>';return}
+ const tau=R*C,W=600,H=300,px=40,py=20,f=t=>ch?Vs*(1-Math.exp(-t/tau)):Vs*Math.exp(-t/tau),
+ X=t=>px+(W-px-10)*t/(5*tau),Y=v=>H-py-(H-2*py)*(Math.abs(Vs)>0?v/Vs:0),cs=getComputedStyle(document.body);
+ g.strokeStyle='rgba(139,92,246,.35)';g.fillStyle=cs.getPropertyValue('--tx2');g.font='11px sans-serif';
+ for(let k=0;k<=5;k++){g.beginPath();g.moveTo(X(k*tau),py);g.lineTo(X(k*tau),H-py);g.stroke();g.fillText(k+'τ',X(k*tau)-6,H-5)}
+ g.strokeStyle='#FFD700';g.lineWidth=2.5;g.beginPath();for(let i=0;i<=200;i++){const t=5*tau*i/200;i?g.lineTo(X(t),Y(f(t))):g.moveTo(X(t),Y(f(t)))}g.stroke();
+ g.fillStyle='#4A6CF7';g.beginPath();g.arc(X(tau),Y(f(tau)),5,0,7);g.fill();
+ $('trout').innerHTML=table([['τ = RC',fmt(tau,'s')],['V(τ)',fmt(f(tau),'V')],['V(5τ)',fmt(f(5*tau),'V')]])}
+
+/* ================= AI (Gemini) ================= */
+const hist=[];
+async function send(){const key=$('key').value.trim(),q=$('msg').value.trim();if(!q)return;
+ const chat=$('chat'),add=(t,c)=>{const p=document.createElement('p');p.className=c;p.textContent=t;chat.appendChild(p);chat.scrollTop=1e9;return p};
+ if(!key){add('ابتدا کلید API را وارد کنید. کلید رایگان: aistudio.google.com','');return}
+ lset('gkey',key);lset('gmdl',$('mdl').value);let text=q;
+ if($('att').checked)text+='\n\n[Netlist]\n'+$('net').value+'\n[Result]\n'+(window.lastSim||'(اجرا نشده)');
+ add(q,'u');$('msg').value='';hist.push({role:'user',parts:[{text}]});const w=add('…','');
+ try{const r=await fetch('https://generativelanguage.googleapis.com/v1beta/models/'+encodeURIComponent($('mdl').value.trim())+':generateContent?key='+encodeURIComponent(key),
+  {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({system_instruction:{parts:[{text:'You are a precise electronics engineering assistant. Answer in Persian unless asked otherwise. Show formulas and units, and state assumptions.'}]},contents:hist})});
+  const j=await r.json();if(!r.ok)throw new Error(j.error&&j.error.message||('HTTP '+r.status));
+  const a=j.candidates&&j.candidates[0]&&j.candidates[0].content.parts.map(p=>p.text).join('')||'(پاسخی دریافت نشد)';
+  hist.push({role:'model',parts:[{text:a}]});w.textContent=a}
+ catch(e){hist.pop();w.textContent='خطا: '+e.message+' — اتصال اینترنت، کلید و نام مدل را بررسی کنید. ماشین‌حساب‌ها و شبیه‌ساز بدون اینترنت کار می‌کنند.'}}
+
+/* ================= External tools ================= */
+const LINKS=[['Falstad Circuit Simulator','شبیه‌ساز مدار آنالوگ/دیجیتال تعاملی','https://www.falstad.com/circuit/'],['Tinkercad Circuits','مدار و آردوینو، ویرایشگر مرورگر','https://www.tinkercad.com/circuits'],['Wokwi','شبیه‌ساز ESP32 / Arduino / Pi Pico','https://wokwi.com'],['EasyEDA','طراحی شماتیک و PCB آنلاین','https://easyeda.com'],['CircuitLab','شبیه‌ساز و شماتیک آنلاین','https://www.circuitlab.com'],['KiCad','طراحی PCB متن‌باز','https://www.kicad.org'],['LTspice','شبیه‌ساز SPICE از Analog Devices','https://www.analog.com/en/resources/design-tools-and-calculators/ltspice-simulator.html'],['TI WEBENCH','طراحی منبع تغذیه و فیلتر','https://webench.ti.com']];
+$('lk').innerHTML=LINKS.map(l=>'<a class="lk" target="_blank" rel="noopener noreferrer" href="'+l[2]+'"><div class="card"><h3>'+l[0]+'</h3><small>'+l[1]+'</small></div></a>').join('');
+document.querySelectorAll('[data-s]').forEach(b=>b.onclick=()=>{const v=$('ps').value.trim();if(v)window.open(b.dataset.s+encodeURIComponent(v),'_blank','noopener')});
+
+/* ================= Shell: tabs, theme, language, search ================= */
+const TABS=[['calc','ماشین‌حساب','Calculators'],['sim','شبیه‌ساز','Simulator'],['ai','هوش مصنوعی','AI'],['links','ابزارهای بیرونی','External']];
+let lang=ls('lang')||'fa';
+function show(id){TABS.forEach(t=>{$(t[0]).classList.toggle('on',t[0]==id)});[...$('nav').children].forEach(b=>b.classList.toggle('on',b.dataset.t==id));if(id=='sim')drawRC()}
+function applyLang(){const fa=lang=='fa';document.documentElement.lang=lang;document.documentElement.dir=fa?'rtl':'ltr';$('lg').textContent=fa?'EN':'FA';
+ $('ttl').textContent=fa?'جعبه‌ابزار الکترونیک':'Electronics Toolkit';$('q').placeholder=fa?'جستجو… (Ctrl+K)':'Search… (Ctrl+K)';
+ $('nav').innerHTML=TABS.map((t,i)=>'<button data-t="'+t[0]+'" title="'+(i+1)+'">'+(fa?t[1]:t[2])+'</button>').join('');
+ [...$('nav').children].forEach(b=>b.onclick=()=>show(b.dataset.t));show(document.querySelector('section.on').id)}
+$('lg').onclick=()=>{lang=lang=='fa'?'en':'fa';lset('lang',lang);applyLang()};
+$('th').onclick=()=>{const d=document.documentElement,n=d.dataset.theme=='dark'?'light':'dark';d.dataset.theme=n;lset('theme',n);drawRC()};
+$('q').oninput=e=>{const v=e.target.value.trim().toLowerCase();show('calc');document.querySelectorAll('#calcs .card').forEach(c=>c.style.display=!v||c.dataset.k.includes(v)?'':'none')};
+document.addEventListener('keydown',e=>{
+ if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()=='k'){e.preventDefault();$('q').focus();return}
+ if(e.key=='Escape'){$('q').value='';$('q').dispatchEvent(new Event('input'));document.activeElement.blur();return}
+ if(/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName))return;
+ const i=+e.key;if(i>=1&&i<=TABS.length)show(TABS[i-1][0])});
+
+/* ================= Init ================= */
+document.documentElement.dataset.theme=ls('theme')||'dark';
+$('key').value=ls('gkey')||'';$('mdl').value=ls('gmdl')||'gemini-2.0-flash';
+buildCalcs();applyLang();runSim();
+$('run').onclick=runSim;['tr','tc','tv','tm'].forEach(i=>$(i).addEventListener('input',drawRC));$('send').onclick=send;
+if('serviceWorker' in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('sw.js').catch(()=>{});
+</script>
+</body>
+</html>
